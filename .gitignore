@@ -1,0 +1,24 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment
+.env
+.env.local
+.env.*.local
+
+# macOS / editor
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+
+# Content authored in production by editors via /admin (committed by the platform
+# git-proxy straight to the configured branch). Local dev edits must not pollute.
+src/content/posts/
+public/uploads/

@@ -1,0 +1,204 @@
+# Sveltia CMS — the content editor for this Ferst site.
+#
+# Backend: writes route through the platform git-proxy. `branch` is STAMPED at
+# build to the deployment's branch by ferst-set-cms-branch (from CF_PAGES_BRANCH);
+# the value here is only a neutral fallback — keep it identical on every branch.
+backend:
+  name: github
+  repo: arkadiuszkulpa/ferst_test_project
+  branch: main
+  base_url: https://signin-dev.ferst.co.uk
+  auth_endpoint: auth
+  api_root: https://signin-dev.ferst.co.uk/git
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: settings
+    label: Site settings
+    files:
+      - name: theme
+        label: Design tokens
+        file: src/content/themeSettings/index.json
+        icon: palette
+        description: "Edit your brand in the Theme Studio, where you preview changes live before publishing — open portal.ferst.co.uk, choose this site, then the Design tab. The fields here still work as a fallback."
+        fields:
+          - { name: brand, label: Brand colour, widget: color, default: '#0E4D4A', hint: Buttons, links, icons, highlights. }
+          - { name: ink, label: Ink colour, widget: color, default: '#0C2123', hint: Headings and body text. }
+          - { name: surface, label: Surface colour, widget: color, default: '#FFFFFF', hint: Page background. }
+          - name: fonts
+            label: Typography
+            widget: object
+            collapsed: false
+            fields:
+              - name: heading
+                label: Heading font
+                widget: select
+                required: false
+                default: ''
+                options: &fonts
+                  - { label: 'Default (theme)', value: '' }
+                  - { label: 'Poppins', value: 'Poppins, system-ui, sans-serif' }
+                  - { label: 'Inter', value: 'Inter, system-ui, sans-serif' }
+                  - { label: 'Playfair Display', value: "'Playfair Display', Georgia, serif" }
+                  - { label: 'Georgia', value: "Georgia, 'Times New Roman', serif" }
+                  - { label: 'System', value: 'system-ui, sans-serif' }
+              - { name: body, label: Body font, widget: select, required: false, default: '', options: *fonts }
+              - { name: display, label: Display font, widget: select, required: false, default: '', options: *fonts }
+          - { name: corners, label: Corners, widget: select, default: rounded, options: [{ label: Sharp, value: sharp }, { label: Rounded, value: rounded }, { label: Soft, value: soft }] }
+          - { name: elevation, label: Elevation, widget: select, default: raised, options: [{ label: Raised, value: raised }, { label: Flat, value: flat }] }
+          - { name: stroke, label: Card stroke, widget: select, default: 'on', options: [{ label: 'On', value: 'on' }, { label: 'Off', value: 'off' }] }
+          - { name: fields, label: Input fields, widget: select, default: boxed, options: [{ label: Boxed, value: boxed }, { label: Filled, value: filled }, { label: Underline, value: underline }] }
+          - { name: darkDepth, label: Dark depth, widget: number, value_type: float, min: 0.14, max: 0.34, step: 0.01, default: 0.21 }
+          - { name: darkChroma, label: Dark colour intensity, widget: number, value_type: float, min: 0, max: 0.15, step: 0.01, default: 0.05 }
+          - name: darkOverrides
+            label: Dark colour overrides (optional)
+            widget: object
+            collapsed: true
+            fields:
+              - { name: ground, label: Ground, widget: string, required: false }
+              - { name: text, label: Text, widget: string, required: false }
+              - { name: accent, label: Accent, widget: string, required: false }
+
+      - name: identity
+        label: Identity & contact
+        file: src/content/siteSettings/index.json
+        icon: info
+        fields:
+          - name: identity
+            label: Identity
+            widget: object
+            fields:
+              - { name: siteTitle, label: Site title, widget: string }
+              - { name: shortName, label: Short name, widget: string }
+              - { name: description, label: Description, widget: text }
+              - { name: location, label: Location, widget: string, required: false }
+          - name: contact
+            label: Contact
+            widget: object
+            fields:
+              - { name: phoneDisplay, label: Phone (display), widget: string, required: false }
+              - { name: phoneTel, label: 'Phone (tel: digits)', widget: string, required: false }
+              - { name: email, label: Email, widget: string, required: false }
+              - { name: facebookUrl, label: Facebook URL, widget: string, required: false }
+
+      - name: logos
+        label: Logos
+        file: src/content/logoSettings/index.json
+        icon: image
+        fields:
+          - { name: primaryLogoLight, label: Header logo (light), widget: image, required: false }
+          - { name: primaryLogoDark, label: Header logo (dark), widget: image, required: false }
+          - { name: secondaryLogoLight, label: Footer logo (light), widget: image, required: false }
+          - { name: secondaryLogoDark, label: Footer logo (dark), widget: image, required: false }
+
+      - name: navbar
+        label: Navigation
+        file: src/content/navbarSettings/index.json
+        icon: menu
+        fields:
+          - name: primary
+            label: Primary links
+            widget: list
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: href, label: Link, widget: string }
+
+      - name: footer
+        label: Footer
+        file: src/content/footerSettings/index.json
+        icon: table_rows
+        fields:
+          - name: footer
+            label: Footer links
+            widget: list
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: href, label: Link, widget: string }
+
+      - name: calendar-settings
+        label: Calendar
+        file: src/content/calendarSettings/index.json
+        icon: calendar_today
+        fields:
+          - { name: title, label: Heading, widget: string, default: Calendar }
+          - { name: intro, label: Intro, widget: text, required: false }
+          - { name: embedUrl, label: Embed URL, widget: string, required: false }
+          - { name: publicUrl, label: Public link, widget: string, required: false }
+          - { name: height, label: Height (px), widget: number, default: 700, value_type: int, min: 200, max: 2000 }
+          - { name: provider, label: Provider name, widget: string, default: Google Calendar }
+          - { name: weekStart, label: Week starts on, widget: select, default: monday, options: [{ label: "Monday", value: monday }, { label: "Sunday", value: sunday }] }
+
+  - name: posts
+    label: Posts
+    label_singular: Post
+    folder: src/content/posts
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    icon: article
+    summary: "{{title}} — {{date}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date, widget: datetime, picker_utc: true }
+      - { name: summary, label: Summary, widget: text, required: false }
+      - name: tags
+        label: Tags
+        widget: relation
+        required: false
+        collection: tags
+        value_field: "{{slug}}"
+        display_fields: [label]
+        search_fields: [label]
+        multiple: true
+      - { name: heroImage, label: Hero image, widget: image, required: false }
+      - { name: attachment, label: Attachment (e.g. PDF), widget: file, required: false }
+      - { name: draft, label: Draft, widget: boolean, default: false, required: false }
+      - { name: body, label: Body, widget: markdown, required: false }
+
+  - name: tags
+    label: Tags
+    label_singular: Tag
+    folder: src/content/tags
+    create: true
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    icon: label
+    identifier_field: label
+    fields:
+      - { name: label, label: Label, widget: string }
+      - { name: description, label: Description, widget: text, required: false }
+      - { name: hidden, label: Hidden, widget: boolean, default: false, required: false }
+
+  - name: pages
+    label: Pages
+    label_singular: Page
+    description: "See each page and request a change — our team makes it and sends it back for you to check. You don't edit the page layout here."
+    folder: src/content/pages
+    extension: json
+    format: json
+    icon: description
+    nested: { depth: 3, summary: "{{title}}" }
+    summary: "{{title}}"
+    identifier_field: title
+    fields:
+      - { name: title, label: Page title, widget: string }
+      - name: requests
+        label: Requested changes
+        label_singular: Request
+        widget: list
+        required: false
+        summary: "{{fields.text}}"
+        fields:
+          - { name: text, label: "What would you like changed?", widget: text }
+          - { name: status, label: Status, widget: select, default: open, options: [{ label: Open, value: open }, { label: Done, value: done }] }
+      - { name: description, label: SEO description, widget: hidden, required: false }
+      - { name: heroImage, widget: hidden, required: false }
+      - { name: align, widget: hidden, required: false }
+      - { name: templateId, widget: hidden, required: false }
+      - { name: draft, widget: hidden, required: false }
+      - { name: blocks, widget: hidden }

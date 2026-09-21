@@ -1,0 +1,15 @@
+{
+  "title": "About",
+  "description": "About Ferst Test Project.",
+  "blocks": [
+    {
+      "type": "heading",
+      "text": "About us",
+      "level": 1
+    },
+    {
+      "type": "prose",
+      "text": "Tell your visitors who you are. Replace this text in the editor."
+    }
+  ]
+}

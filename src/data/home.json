@@ -1,0 +1,24 @@
+{
+  "title": "Home",
+  "description": "Ferst Test Project — a new Ferst site.",
+  "blocks": [
+    {
+      "type": "heading",
+      "text": "Welcome to Ferst Test Project",
+      "level": 1
+    },
+    {
+      "type": "prose",
+      "text": "This is your new site. Edit this page and your brand in the portal, or manage content in the CMS at /admin.\n\nAdd sections, pages and posts — everything is composed from ready-made blocks."
+    },
+    {
+      "type": "cta",
+      "title": "Make it yours",
+      "text": "Open the editor to start adding your content.",
+      "cta": {
+        "label": "Learn more",
+        "href": "/about"
+      }
+    }
+  ]
+}

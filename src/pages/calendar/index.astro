@@ -1,0 +1,21 @@
+---
+// Calendar (/calendar) — consent-gated by the core's CalendarEmbed (nothing
+// loads from Google until the visitor opts in). Configure it in the CMS.
+import Base from 'ferst-core/layouts/Base.astro';
+import CalendarEmbed from 'ferst-core/components/CalendarEmbed.astro';
+import { getCalendarSettings } from 'ferst-core/lib/calendar';
+
+const cal = await getCalendarSettings();
+---
+
+<Base title={cal.title} description={cal.intro || undefined}>
+  <CalendarEmbed
+    title={cal.title}
+    intro={cal.intro}
+    embedUrl={cal.embedUrl}
+    publicUrl={cal.publicUrl}
+    height={cal.height}
+    provider={cal.provider}
+    weekStart={cal.weekStart}
+  />
+</Base>

@@ -1,0 +1,12 @@
+{
+  "primary": [
+    {
+      "label": "About",
+      "href": "/about"
+    },
+    {
+      "label": "Calendar",
+      "href": "/calendar"
+    }
+  ]
+}

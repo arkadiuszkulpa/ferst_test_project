@@ -1,0 +1,17 @@
+---
+// Content pages from the `pages` collection — one JSON file per page, its
+// filename the URL slug. Thin catch-all using the core's page renderer.
+import Base from 'ferst-core/layouts/Base.astro';
+import BlockRenderer from 'ferst-core/components/BlockRenderer.astro';
+import { pageSchema } from 'ferst-core/content/blocks';
+import { getPageRoutes } from 'ferst-core/lib/pages';
+
+export const getStaticPaths = getPageRoutes;
+
+const { entry } = Astro.props;
+const page = pageSchema.parse(entry.data);
+---
+
+<Base title={page.title} description={page.description} heroImage={page.heroImage} align={page.align}>
+  <BlockRenderer blocks={page.blocks} />
+</Base>

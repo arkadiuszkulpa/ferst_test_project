@@ -1,0 +1,13 @@
+---
+// Home — composed from block JSON (src/data/home.json), rendered through core.
+import Base from 'ferst-core/layouts/Base.astro';
+import BlockRenderer from 'ferst-core/components/BlockRenderer.astro';
+import { pageSchema } from 'ferst-core/content/blocks';
+import homeData from '../data/home.json';
+
+const page = pageSchema.parse(homeData);
+---
+
+<Base title={page.title} description={page.description} heroImage={page.heroImage} align={page.align}>
+  <BlockRenderer blocks={page.blocks} />
+</Base>
